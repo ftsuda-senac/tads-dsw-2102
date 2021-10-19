@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Exemplos Spring MVC</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>
+        <h1>Exemplo 06 Spring MVC - Dados em tabela</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th title="index/count">#index/#count</th>
+                    <th>Nome</th>
+                    <th>Apelido</th>
+                    <th>Data nascimento</th>
+                    <th>Número</th>
+                    <th>E-mail</th>
+                    <th>Telefone</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item,stat : ${itens}">
+                    <td th:text="${stat.index + '/' + stat.count}"></td>
+                    <td th:text="${item.nome}"></td>
+                    <td th:text="${item.apelido}"></td>
+                    <td th:text="${item.dataNascimento}"></td>
+                    <td th:text="${item.numero}"></td>
+                    <td th:text="${item.email}"></td>
+                    <td th:text="${item.telefone}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Exemplos Spring MVC</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>
+        <h1>Exemplo 07 Spring MVC</h1>
+        <p>User agent: <span th:text="${ua}"></span></p>
+        <h4 th:if="${mobile}" style="color: green"> ACESSO VIA DISPOSITIVO MÓVEL</h4>
+        <h4 th:if="${!mobile}" style="color: red"> ACESSO VIA NAVEGADOR DESKTOP</h4>
+    </body>
+</html>

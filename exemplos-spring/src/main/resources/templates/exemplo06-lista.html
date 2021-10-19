@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Exemplos Spring MVC</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>
+        <h1>Exemplo 06 Spring MVC - Dados em lista</h1>
+        <ul>
+            <li th:each="item,stat : ${itens}">
+                <h3 th:text="${item.nome}"></h3>
+                <p>Apelido: <span th:text="${item.apelido}"></span></p>
+                <p>Data de nascimento: <span th:text="${item.dataNascimento}"></span></p>
+                <p>Número: <span th:text="${item.numero}"></span> (<span th:if="${item.numero % 2 == 0}">PAR</span><span th:if="${item.numero % 2 == 1}">ÍMPAR</span>)</p>
+                <p>E-mail: <span th:text="${item.email}"></span></p>
+                <p>Telefone: <span th:text="${item.telefone}"></span></p>
+                <small th:text="${'index: ' + stat.index + ', count: ' + stat.count}"></small>
+            </li>
+        </ul>
+
+    </body>
+</html>

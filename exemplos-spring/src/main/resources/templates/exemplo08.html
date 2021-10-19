@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Exemplos Spring MVC</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>
+        <h1>Exemplo 08 Spring MVC</h1>
+        <h2>Cabeçalhos HTTP recebidos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cabeçalho HTTP</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cab : ${cabecalhos}">
+                    <td th:text="${cab.key}"></td>
+                    <td th:text="${cab.value}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </body>
+</html>
