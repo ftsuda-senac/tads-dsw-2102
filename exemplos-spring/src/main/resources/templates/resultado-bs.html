@@ -12,7 +12,7 @@
     <body>
         <main class="container">
             <div class="row">
-                <section class="col-md-12">
+                <section class="col-md-12" th:if="${dados != null}">
                     <h1>Resultado</h1>
                     <div>ID: <span th:text="${dados.id}"></span></div>
                     <div>Nome: <span th:text="${dados.nome}"></span></div>
@@ -32,6 +32,11 @@
                             <li th:text="${interesse}"></li>
                         </ul>
                     </div>
+                    <a th:href="@{/exemplo-post}" class="btn btn-success">Voltar para formulário</a>
+                </section>
+                <section class="col-md-12" th:unless="${dados != null}">
+                    <h2>Acesso inválido</h2>
+                    <a th:href="@{/exemplo-post}" class="btn btn-success">Voltar para formulário</a>
                 </section>
             </div>
         </main>
