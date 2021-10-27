@@ -8,37 +8,62 @@ package br.senac.tads.dsw.exemplos;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class DadosPessoais {
-    
+
     private Integer id;
-    
+
+    @NotBlank(message = "Por favor preencha o nome XXXXXXXX")
+    @Size(max = 100)
     private String nome;
-    
+
     private String apelido;
-    
+
     private String descricao;
-    
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // ISO-8601
+    @NotNull
+    @Past
     private LocalDate dataNascimento;
 
+    @NotBlank
+    @Size(max = 100)
+    @Email
     private String email;
-    
+
     private String telefone;
-    
+
     private String senha;
-    
+
     private String repetirSenha;
-    
+
+    @Min(1)
+    @Max(99)
     private int numero;
-    
+
+    @Min(0)
+    @Max(3)
+    @Digits(integer = 1, fraction = 2, message = "Altura deve ter no máximo 2 casas decimais")
     private BigDecimal altura;
-    
+
+    @Min(0)
+    @Max(500)
+    @Digits(integer = 3, fraction = 1)
     private BigDecimal peso;
-    
+
     private int genero = -1;
-    
+
+    @NotEmpty
     private List<String> interesses;
 
     public Integer getId() {
@@ -153,5 +178,4 @@ public class DadosPessoais {
         this.interesses = interesses;
     }
 
-    
 }

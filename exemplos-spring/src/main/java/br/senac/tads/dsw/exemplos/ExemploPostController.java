@@ -9,7 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +30,7 @@ public class ExemploPostController {
     
     @GetMapping
     public ModelAndView mostrarForm() {
-        ModelAndView mv = new ModelAndView("formulario-bs");
+        ModelAndView mv = new ModelAndView("formulario-validacao-bs");
         mv.addObject("dados", new DadosPessoais());
         return mv;
     }
@@ -53,7 +55,7 @@ public class ExemploPostController {
         interesses.add("Viagens");
         dados.setInteresses(interesses);
         
-        ModelAndView mv = new ModelAndView("formulario-bs");
+        ModelAndView mv = new ModelAndView("formulario-validacao-bs");
         mv.addObject("dados", dados);
         return mv;
     }
@@ -71,6 +73,23 @@ public class ExemploPostController {
         // Escopo Flash - Mantém as informações entre duas requisições consecutivas
         redirectAttributes.addFlashAttribute("dados", dados);
         
+        ModelAndView mv = new ModelAndView("redirect:/exemplo-post/resultado");
+        return mv;
+    }
+    
+    @PostMapping("/salvar-com-validacao")
+    public ModelAndView salvarDadosComValidacao(
+            @ModelAttribute("dados") @Valid DadosPessoais dados,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
+        
+        if (bindingResult.hasErrors()) {
+            // Reapresentar formulario para que usuário possa corrigir erros
+            ModelAndView mvErro = new ModelAndView("formulario-validacao-bs");
+            return mvErro;
+        }
+        // Escopo Flash - Mantém as informações entre duas requisições consecutivas
+        redirectAttributes.addFlashAttribute("dados", dados);
         ModelAndView mv = new ModelAndView("redirect:/exemplo-post/resultado");
         return mv;
     }

@@ -21,7 +21,10 @@
                         <div class="form-group row">
                             <label for="txtNome" class="col-sm-2 col-form-label">Nome</label>
                             <div class="col-sm-10">
-                                <input type="text" name="nome" class="form-control" id="txtNome" placeholder="Nome" th:field="*{nome}" required maxlength="100" />
+                                <input type="text" name="nome" class="form-control" id="txtNome" placeholder="Nome"
+                                       th:field="*{nome}" required maxlength="100" 
+                                       th:classappend="${#fields.hasErrors('nome')}? is-invalid" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}">ERRO</div>
                             </div>
                         </div>
 
@@ -35,14 +38,20 @@
                         <div class="form-group row">
                             <label for="txtDataNascimento" class="col-sm-2 col-form-label">Data de nascimento</label>
                             <div class="col-sm-10">
-                                <input type="date" name="dataNascimento" class="form-control" id="txtDataNascimento" th:field="*{dataNascimento}" required>
+                                <input type="date" name="dataNascimento" class="form-control" id="txtDataNascimento"
+                                       th:field="*{dataNascimento}" required
+                                       th:classappend="${#fields.hasErrors('dataNascimento')}? is-invalid" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}">ERRO</div>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="txtEmail" class="col-sm-2 col-form-label">E-mail</label>
                             <div class="col-sm-10">
-                                <input type="email" name="email" class="form-control" id="txtEmail" placeholder="E-mail" th:field="*{email}" required maxlength="100">
+                                <input type="email" name="email" class="form-control" id="txtEmail" placeholder="E-mail"
+                                       th:field="*{email}" required maxlength="100"
+                                       th:classappend="${#fields.hasErrors('email')}? is-invalid" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">ERRO</div>
                             </div>
                         </div>
                         
@@ -55,7 +64,10 @@
                         <div class="form-group row">
                             <label for="txtSenha" class="col-sm-2 col-form-label">Senha</label>
                             <div class="col-sm-10">
-                                <input type="password" name="senha" class="form-control" id="txtSenha" placeholder="Senha" th:field="*{senha}">
+                                <input type="password" name="senha" class="form-control" id="txtSenha" placeholder="Senha"
+                                       th:field="*{senha}"
+                                       th:classappend="${#fields.hasErrors('senha')}? is-invalid" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}">ERRO</div>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -68,25 +80,34 @@
                         <div class="form-group row">
                             <label for="txtNumero" class="col-sm-2 col-form-label">Número da sorte</label>
                             <div class="col-sm-10">
-                                <input type="number" name="numero" class="form-control" id="txtNumero" min="1" max="99" placeholder="Número de 1 a 99" th:field="*{numero}">
+                                <input type="number" name="numero" class="form-control" id="txtNumero"
+                                       min="1" max="99" placeholder="Número de 1 a 99" th:field="*{numero}"
+                                       th:classappend="${#fields.hasErrors('numero')}? is-invalid" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('numero')}" th:errors="*{numero}">ERRO</div>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="txtAltura" class="col-sm-2 col-form-label">Altura</label>
                             <div class="col-sm-10">
-                                <input type="number" name="altura" class="form-control" id="txtAltura" min="0" max="9.99" step="0.01" placeholder="Altura em metros com no máximo 2 casa decimais" th:field="*{altura}">
+                                <input type="number" name="altura" class="form-control" id="txtAltura"
+                                       min="0" max="9.99" step="0.01" placeholder="Altura em metros com no máximo 2 casa decimais"
+                                       th:field="*{altura}"
+                                       th:classappend="${#fields.hasErrors('altura')}? is-invalid" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('altura')}" th:errors="*{altura}">ERRO</div>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="txtPeso" class="col-sm-2 col-form-label">Peso</label>
                             <div class="col-sm-10">
-                                <input type="number" name="peso" class="form-control" id="txtPeso" min="0" max="999.9" step="0.1" placeholder="Peso em Kg com no máximo 1 casa decimal" th:field="*{peso}">
+                                <input type="number" name="peso" class="form-control" id="txtPeso"
+                                       min="0" max="999.9" step="0.1" placeholder="Peso em Kg com no máximo 1 casa decimal"
+                                       th:field="*{peso}"
+                                       th:classappend="${#fields.hasErrors('peso')}? is-invalid" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('peso')}" th:errors="*{peso}">ERRO</div>
                             </div>
                         </div>
-
-
 
                         <fieldset class="form-group">
                             <div class="row">
@@ -142,6 +163,7 @@
                                             Investimentos
                                         </label>
                                     </div>
+                                    <div th:if="${#fields.hasErrors('interesses')}" th:errors="*{interesses}">ERRO</div>
                                 </div>
                             </div>
                         </fieldset>
