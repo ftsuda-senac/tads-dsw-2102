@@ -5,6 +5,7 @@
  */
 package br.senac.tads.dsw.exemplos;
 
+import br.senac.tads.dsw.exemplos.validacao.SenhasIguais;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,9 +17,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@SenhasIguais
 public class DadosPessoais {
 
     private Integer id;
@@ -43,6 +46,8 @@ public class DadosPessoais {
 
     private String telefone;
 
+    // REGEX para senha https://stackoverflow.com/a/59317682
+    @Pattern(regexp = "^(?=(.*[a-z]){1,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$%^&*()\\-__+.]){1,}).{8,}$")
     private String senha;
 
     private String repetirSenha;
