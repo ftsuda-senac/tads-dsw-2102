@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.senac.tads.dsw.exemplosspring.sessao.item.Item;
 import br.senac.tads.dsw.exemplosspring.sessao.item.ItemService;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  * Para remover atributos ver
@@ -26,6 +27,7 @@ import br.senac.tads.dsw.exemplosspring.sessao.item.ItemService;
  */
 @Controller
 @RequestMapping("/exemplo-sessao1")
+@SessionAttributes("itensSelecionados1")
 public class ExemploSessaoController1 {
 
     @Autowired
@@ -37,8 +39,11 @@ public class ExemploSessaoController1 {
     }
 
     @PostMapping
-    public ModelAndView adicionarItem(@ModelAttribute("itemId") Integer itemId,
-            List<ItemSelecionado> itensSelecionados, RedirectAttributes redirAttr, HttpServletRequest servletReq) {
+    public ModelAndView adicionarItem(
+            @ModelAttribute("itemId") Integer itemId,
+            @ModelAttribute("itensSelecionados1") List<ItemSelecionado> itensSelecionados,
+            RedirectAttributes redirAttr,
+            HttpServletRequest servletReq) {
         Item item = itemService.findById(itemId);
         itensSelecionados.add(new ItemSelecionado(item, servletReq.getHeader("user-agent")));
         redirAttr.addFlashAttribute("msg", "Item ID " + item.getId() + " adicionado com sucesso");
@@ -46,13 +51,16 @@ public class ExemploSessaoController1 {
     }
 
     @GetMapping("/limpar")
-    public ModelAndView limparSessao(List<ItemSelecionado> itensSelecionados,
+    public ModelAndView limparSessao(
+            @ModelAttribute("itensSelecionados1") List<ItemSelecionado> itensSelecionados,
             RedirectAttributes redirAttr) {
         itensSelecionados.clear();
         redirAttr.addFlashAttribute("msg", "Itens removidos");
         return new ModelAndView("redirect:/exemplo-sessao1");
     }
 
+    // 1) Método para inicialização dos itensSelecionados como @ModelAttribute
+    @ModelAttribute("itensSelecionados1")
     public List<ItemSelecionado> getItensSelecionados() {
         return new ArrayList<>();
     }

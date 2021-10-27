@@ -9,6 +9,7 @@ import java.util.List;
 /**
  *
  * @author ftsuda
+ * API - Application Programming Interface
  */
 public interface ItemService {
 
@@ -19,5 +20,5 @@ public interface ItemService {
     Item save(Item item);
 
     void deleteById(Integer id);
-
+    
 }
