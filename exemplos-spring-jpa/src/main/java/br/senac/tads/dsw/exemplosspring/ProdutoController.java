@@ -31,6 +31,10 @@ import br.senac.tads.dsw.exemplosspring.produto.CategoriaRepository;
 import br.senac.tads.dsw.exemplosspring.produto.ImagemProduto;
 import br.senac.tads.dsw.exemplosspring.produto.Produto;
 import br.senac.tads.dsw.exemplosspring.produto.ProdutoRepository;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -50,13 +54,34 @@ public class ProdutoController {
     public ModelAndView listar(@RequestParam(name = "offset", defaultValue = "0") int offset,
             @RequestParam(name = "qtd", defaultValue = "500") int qtd,
             @RequestParam(name = "idsCat", required = false) List<Integer> idsCat) {
-        List<Produto> resultados;
+        List<Produto> resultados = null;
+        int pagina = offset/qtd;
         if (idsCat != null && !idsCat.isEmpty()) {
             // Busca pelos IDs das categorias informadas
-            resultados = produtoRepository.findByCategoria(idsCat, offset, qtd);
+            Page<Produto> pagedResultados = produtoRepository.findDistinctByCategorias_IdIn(idsCat, PageRequest.of(pagina, qtd));
+            resultados = pagedResultados.getContent();
         } else {
             // Lista todos os produtos usando paginacao
-            resultados = produtoRepository.findAll(offset, qtd);
+            Page<Produto> pagedResultados = produtoRepository.findAll(PageRequest.of(pagina, qtd));
+            resultados = pagedResultados.getContent();
+        }
+        return new ModelAndView("produtos/lista").addObject("produtos", resultados);
+    }
+    
+    @GetMapping("/busca")
+    public ModelAndView buscar(@RequestParam(name = "offset", defaultValue = "0") int offset,
+            @RequestParam(name = "qtd", defaultValue = "500") int qtd,
+            @RequestParam(name = "palavra", required = false) String palavraBusca) {
+        List<Produto> resultados = null;
+        int pagina = offset/qtd;
+        if (palavraBusca != null && palavraBusca.length() > 0) {
+            // 1) Busca pelo nome do produto
+            Page<Produto> pagedResultados = produtoRepository.buscarPorNomeSqlNativo(palavraBusca, PageRequest.of(pagina, qtd));
+            resultados = pagedResultados.getContent();
+        } else {
+            // Lista todos os produtos usando paginacao
+            Page<Produto> pagedResultados = produtoRepository.findAll(PageRequest.of(pagina, qtd));
+            resultados = pagedResultados.getContent();
         }
         return new ModelAndView("produtos/lista").addObject("produtos", resultados);
     }
@@ -69,18 +94,24 @@ public class ProdutoController {
     @GetMapping("/{id}/editar")
     public ModelAndView editar(@PathVariable("id") long id) {
 
-        Produto prod = produtoRepository.findById(id);
-        if (prod.getCategorias() != null && !prod.getCategorias().isEmpty()) {
-            Set<Integer> idsCategorias = new HashSet<>();
-            for (Categoria cat : prod.getCategorias()) {
-                idsCategorias.add(cat.getId());
+        Optional<Produto> optProd = produtoRepository.findById(id);
+        if (optProd.isPresent()) {
+            Produto prod = optProd.get();
+            if (prod.getCategorias() != null && !prod.getCategorias().isEmpty()) {
+                Set<Integer> idsCategorias = new HashSet<>();
+                for (Categoria cat : prod.getCategorias()) {
+                    idsCategorias.add(cat.getId());
+                }
+                prod.setIdsCategorias(idsCategorias);
             }
-            prod.setIdsCategorias(idsCategorias);
+            if (prod.getImagens() != null && !prod.getImagens().isEmpty()) {
+                prod.setImagensList(new ArrayList<>(prod.getImagens()));
+            }
+            return new ModelAndView("produtos/form").addObject("produto", prod);
         }
-        if (prod.getImagens() != null && !prod.getImagens().isEmpty()) {
-            prod.setImagensList(new ArrayList<>(prod.getImagens()));
-        }
-        return new ModelAndView("produtos/form").addObject("produto", prod);
+        ModelAndView notFound = new ModelAndView("redirect:/produtos");
+        notFound.setStatus(HttpStatus.NOT_FOUND);
+        return notFound;
     }
 
     @PostMapping("/salvar")
@@ -90,9 +121,12 @@ public class ProdutoController {
         if (produto.getIdsCategorias() != null && !produto.getIdsCategorias().isEmpty()) {
             Set<Categoria> categoriasSelecionadas = new HashSet<>();
             for (Integer idCat : produto.getIdsCategorias()) {
-                Categoria cat = categoriaRepository.findById(idCat);
-                categoriasSelecionadas.add(cat);
-                cat.setProdutos(new HashSet<>(Arrays.asList(produto)));
+                Optional<Categoria> optCat = categoriaRepository.findById(idCat);
+                if (optCat.isPresent()) {
+                    Categoria cat = optCat.get();
+                    categoriasSelecionadas.add(cat);
+                    cat.setProdutos(new HashSet<>(Arrays.asList(produto)));
+                }
             }
             produto.setCategorias(categoriasSelecionadas);
         }

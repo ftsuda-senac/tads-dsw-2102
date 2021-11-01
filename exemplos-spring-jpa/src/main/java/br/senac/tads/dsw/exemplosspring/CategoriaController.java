@@ -21,6 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.senac.tads.dsw.exemplosspring.produto.Categoria;
 import br.senac.tads.dsw.exemplosspring.produto.CategoriaRepository;
+import java.util.Optional;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -46,8 +48,15 @@ public class CategoriaController {
 
     @GetMapping("/{id}/editar")
     public ModelAndView editar(@PathVariable("id") int id) {
-        Categoria cat = repository.findById(id);
-        return new ModelAndView("categorias/form").addObject("categoria", cat);
+        Optional<Categoria> optCat = repository.findById(id);
+        if (optCat.isPresent()) {
+            // Significa que a categoria existe para o ID informado
+            Categoria cat = optCat.get();
+            return new ModelAndView("categorias/form").addObject("categoria", cat);
+        }
+        ModelAndView notFound = new ModelAndView("redirect:/categorias");
+        notFound.setStatus(HttpStatus.NOT_FOUND);
+        return notFound;
     }
 
     @PostMapping("/salvar")
