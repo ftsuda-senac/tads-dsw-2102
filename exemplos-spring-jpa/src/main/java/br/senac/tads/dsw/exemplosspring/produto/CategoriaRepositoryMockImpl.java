@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  *
  * @author fernando.tsuda
  */
-@Service
+// @Service
 public class CategoriaRepositoryMockImpl implements CategoriaRepository {
 
     private Map<Integer, Categoria> mapItens;
