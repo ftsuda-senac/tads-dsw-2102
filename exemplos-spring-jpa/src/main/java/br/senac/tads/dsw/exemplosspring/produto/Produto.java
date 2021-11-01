@@ -5,6 +5,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
@@ -12,10 +23,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Entity
 public class Produto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
@@ -39,18 +53,27 @@ public class Produto implements Serializable {
 
     private boolean disponivel;
 
+    @Column(nullable = false)
     private LocalDateTime dtCadastro;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "produto_categoria",
+            joinColumns = @JoinColumn(name = "produto_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private Set<Categoria> categorias;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "produto")
     private Set<ImagemProduto> imagens;
 
+    @Transient // indica que campo não será mapeado no Banco de dados
     private transient Set<Integer> idsCategorias;
 
     // Usando lista como apoio para receber dados do form (Set gera erro)
     // https://stackoverflow.com/a/28505620
+    @Transient // indica que campo não será mapeado no Banco de dados
     private transient List<ImagemProduto> imagensList;
 
+    @Transient
     private String observacoes;
 
     public Produto() {
