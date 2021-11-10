@@ -20,6 +20,7 @@ import br.senac.tads.dsw.exemplorest.dominio.Interesse;
 import br.senac.tads.dsw.exemplorest.dominio.InteresseRepository;
 import br.senac.tads.dsw.exemplorest.dominio.Pessoa;
 import br.senac.tads.dsw.exemplorest.dominio.PessoaRepository;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/classic/pessoas")
@@ -36,7 +37,8 @@ public class PessoaClassicController {
     }
 
     @GetMapping
-    public ModelAndView listar(@RequestParam(value = "pagina", defaultValue = "0") int pagina,
+    public ModelAndView listar(
+            @RequestParam(value = "pagina", defaultValue = "0") int pagina,
             @RequestParam(value = "qtd", defaultValue = "10") int qtd) {
         Page<Pessoa> pessoas = pessoaRepository.findAll(PageRequest.of(pagina, qtd));
         ModelAndView mv = new ModelAndView("pessoa/lista-template");
@@ -91,7 +93,7 @@ public class PessoaClassicController {
             Pessoa p = optPessoa.get();
             pessoaRepository.deleteById(id);
             reditAttr.addFlashAttribute("msgSucesso",
-                    p.getNome() + " adicionado com sucesso com ID " + p.getId());
+                    p.getNome() + " removido com sucesso com ID " + p.getId());
             return "redirect:/classic/pessoas";
         }
         reditAttr.addFlashAttribute("msgErro", "Pessoa com ID " + id + " não encontrada");

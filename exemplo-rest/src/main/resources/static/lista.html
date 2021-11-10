@@ -45,7 +45,40 @@ code {
 </style>
 <!-- IMPLEMENTAR FUNCIONALIDADES JAVASCRIPT/AJAX -->
 <script>
-  
+var paginaAtual = 0;
+var ultimaPagina = 0;
+var qtd = 10;
+
+function montarLinhaTabela(item) {
+    return  '<tr>' +
+            '<td>' + item.id + '</td>' +
+            '<td>' + item.nome + '</td>' +
+            '<td>' + item.dataNascimento + '</td>' +
+            '<td>' +
+            '<a href="form.html?id=' + item.id + '" class="btn btn-primary"><i class="fas fa-edit"></i></a>&nbsp;' +
+            '<button class="btn btn-danger" onclick="alert(\'Apagar item ID ' + item.id + '\')"><i class="fas fa-trash"></i></button>' +
+            '</td>' +
+            '</tr>'
+}
+
+function carregarDados() {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', 'http://127.0.0.1:8080/rest/pessoas', true)
+    xhr.addEventListener('load', function() {
+        if (xhr.status === 200) {
+            let data = JSON.parse(xhr.responseText)
+            let container = document.querySelector('#itensTabela')
+            for (const item of data.content) {
+                container.insertAdjacentHTML('beforeend', montarLinhaTabela(item))
+            }
+        }
+    })
+    xhr.send()
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    carregarDados();
+})
 </script>
 </head>
 <body class="d-flex flex-column h-100">
